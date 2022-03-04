@@ -1,5 +1,5 @@
-﻿using ECommercialAPI.Application.Abstractions;
-using ECommercialAPI.Persistence.Concrete;
+﻿using Microsoft.EntityFrameworkCore;
+using ECommercialAPI.Persistence.Contexts;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace ECommercialAPI.Persistence
     {
         public static void AddPersistemceServices(this IServiceCollection services)
         {
-            services.AddSingleton<IProductService, ProductService>();
+            services.AddDbContext<ECommercialAPIDbContext>(options => options.UseNpgsql(Configuration.ConnectionString));
         }
     }
 }

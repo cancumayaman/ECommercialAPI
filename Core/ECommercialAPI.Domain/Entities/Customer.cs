@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommercialAPI.Application.Abstractions
+namespace ECommercialAPI.Domain.Entities
 {
-    public interface IProductService
+    public class Customer:BaseEntity
     {
-        List<Product> GetProducts();
+        public string Name { get; set; }
+        public ICollection<Product> Products { get; set; }
     }
 }
