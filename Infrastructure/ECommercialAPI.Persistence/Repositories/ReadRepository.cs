@@ -21,14 +21,34 @@ namespace ECommercialAPI.Persistence.Repositories
 
         public DbSet<T> Table => _context.Set<T>();
 
-        public IQueryable<T> GetAll()
-            => Table;
-        public IQueryable<T> GetWhere(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
-            => Table.Where(predicate);
-        public async Task<T> GetSingleAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
-            => await Table.FirstOrDefaultAsync(predicate);
-        public Task<T> GetByIdAsync(string id)
-            => Table.FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+        public IQueryable<T> GetAll(bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query;
+        }
+        public IQueryable<T> GetWhere(System.Linq.Expressions.Expression<Func<T, bool>> predicate, bool tracking = true)
+        {
+            var query = Table.Where(predicate);
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query;
+        }
 
+        public async Task<T> GetSingleAsync(System.Linq.Expressions.Expression<Func<T, bool>> predicate, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            return await query.FirstOrDefaultAsync(predicate);
+        }
+        public async Task<T> GetByIdAsync(string id, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = query.AsNoTracking();
+            return await query.FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+        }
     }
 }
